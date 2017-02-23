@@ -55,3 +55,24 @@ It is based on [this](https://github.com/lzyzsd/JsBridge) repository.
 2. Set your own `WebViewClient` to `BridgeWebView`
 
 		webView.getBridgeWebViewClient().setExtraWebViewClient(new MxWebViewClient());
+
+
+
+
+## Usage
+
+In your project root build.gradle, add jitpack to your repositories
+
+	
+	allprojects {
+	    repositories {
+
+	         ...
+
+	        maven { url "https://jitpack.io" }
+	    }
+	}
+
+and in the build.gradle of your app module: 
+
+	compile 'com.github.ziv-zh:jsBridge:0.2.2'
