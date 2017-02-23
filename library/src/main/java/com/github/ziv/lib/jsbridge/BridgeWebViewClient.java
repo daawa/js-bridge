@@ -102,7 +102,7 @@ public class BridgeWebViewClient extends WebViewClient {
 
     private void injectLocalJs(){
         if (BridgeWebView.toLoadJs != null) {
-            BridgeUtil.getInstance(webView).webViewLoadLocalJs(webView, BridgeWebView.toLoadJs);
+            BridgeUtil.getInstance(webView.getBridgeName()).webViewLoadLocalJs(webView, BridgeWebView.toLoadJs);
         }
     }
 }
