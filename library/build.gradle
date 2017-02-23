@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.ziv-zh'
+
+version = "1.0.5"
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.3'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName version
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+}
+
+def siteUrl = 'https://github.com/ziv-zh/JsBridge'
+def gitUrl = 'https://github.com/ziv-zh/JsBridge.git'
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
