@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.github.ziv.lib.jsbridge.BridgeHandler;
 import com.github.ziv.lib.jsbridge.BridgeWebView;
@@ -89,6 +90,17 @@ public class MainActivity extends Activity implements OnClickListener {
 			public void handler(String data, CallBackFunction function) {
 				Log.i(TAG, "handler = submitFromWeb, data from web = " + data);
                 function.onCallBack("submitFromWeb exe, response data 中文 from Java");
+			}
+
+		});
+
+		webView.registerHandler("giveMeToast", new BridgeHandler() {
+
+			@Override
+			public void handler(String data, CallBackFunction function) {
+				Log.i(TAG, "handler = giveMeToast, data from web = " + data);
+				Toast.makeText(MainActivity.this,"handler = giveMeToast, data from web = " + data,Toast.LENGTH_SHORT).show();
+				function.onCallBack("giveMeToast called");
 			}
 
 		});

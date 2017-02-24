@@ -29,6 +29,12 @@
             <input type="button" id="enter1" value="调用Native方法" onclick="testClick1();"
             />
         </p>
+
+        <p>
+            <input type="button" id="enter3" value="调用Native方法，无回调" onclick="testClick2();"
+            />
+        </p>
+
         <p>
             <input type="button" id="enter2" value="显示html" onclick="testDiv();" />
         </p>
@@ -46,7 +52,7 @@
             var str2 = document.getElementById("text2").value;
 
             //send message to native
-            var data = {id: 1, content: "这是一个图片 <img src=\"a.png\"/> test\r\nhahaha"};
+            var data = {'name':''+str1, 'password':''+str2};
             window.haha.send(
                 data
                 , function(responseData) {
@@ -57,16 +63,19 @@
         }
 
         function testClick1() {
-            var str1 = document.getElementById("text1").value;
-            var str2 = document.getElementById("text2").value;
-
-            //call native method
             window.haha.callHandler(
                 'submitFromWeb'
                 , {'param': '中文测试'}
                 , function(responseData) {
                     document.getElementById("show").innerHTML = "send get responseData from java, data = " + responseData
                 }
+            );
+        }
+
+        function testClick2() {
+            window.haha.callHandler(
+                'giveMeToast'
+                , {'param': 'JS无回调'}
             );
         }
 
