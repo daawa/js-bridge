@@ -2,7 +2,7 @@
 
 It is based on [this](https://github.com/lzyzsd/JsBridge) repository. 
 
-[A new pull-request](https://github.com/lzyzsd/JsBridge/pull/74) has been sent to the original repository, and it is still pending.
+[A new pull-request](https://github.com/lzyzsd/JsBridge/pull/74) has been sent to the original repository, though it is still pending.
 
 
 ## Here are some main differences:
@@ -75,4 +75,4 @@ In your project root build.gradle, add jitpack to your repositories
 
 and in the build.gradle of your app module: 
 
-	compile 'com.github.ziv-zh:jsBridge:0.2.2'
+	compile 'com.github.ziv-zh:jsBridge:0.2.2.1'
