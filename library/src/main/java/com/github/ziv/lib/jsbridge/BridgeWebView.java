@@ -47,7 +47,8 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     private long uniqueId = 0;
 
     public BridgeWebView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        init(attrs);
     }
 
     public BridgeWebView(Context context, AttributeSet attrs, int defStyle) {
