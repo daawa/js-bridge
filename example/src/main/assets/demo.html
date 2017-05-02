@@ -31,12 +31,17 @@
         </p>
 
         <p>
-            <input type="button" id="enter3" value="调用Native方法，无回调" onclick="testClick2();"
+            <input type="button" id="enter2" value="调用Native方法，无回调" onclick="testClick2();"
             />
         </p>
 
         <p>
-            <input type="button" id="enter2" value="显示html" onclick="testDiv();" />
+            <input type="button" id="enter3" value="无参，有回调" onclick="testClick3();"
+            />
+        </p>
+
+        <p>
+            <input type="button" id="testdiv" value="显示html" onclick="testDiv();" />
         </p>
         <p>
             <input type="file" value="打开文件" />
@@ -76,6 +81,16 @@
             window.haha.callHandler(
                 'giveMeToast'
                 , {'param': 'JS无回调'}
+            );
+        }
+
+        function testClick3() {
+            window.haha.callHandler(
+                'giveMeToast'
+                , function(ret){
+                        console.log('无参， 有回调。');
+                        alert('无参， 有回调。');
+                  }
             );
         }
 

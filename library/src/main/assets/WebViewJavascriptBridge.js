@@ -52,6 +52,11 @@
     }
 
     function callHandler(handlerName, data, responseCallback) {
+        if(data && (typeof data === 'function') && !responseCallback){
+            responseCallback = data;
+            data = '';
+        }
+
         _doSend({
             handlerName: handlerName,
             data: data
