@@ -36,7 +36,12 @@
         </p>
 
         <p>
-            <input type="button" id="enter3" value="无参，有回调" onclick="testClick3();"
+            <input type="button" id="enter3" value="无参，有回调，回传json" onclick="testRetJson();"
+            />
+        </p>
+
+        <p>
+            <input type="button" id="enter4" value="无参，有回调，回传String" onclick="testRetString();"
             />
         </p>
 
@@ -84,12 +89,22 @@
             );
         }
 
-        function testClick3() {
+        function testRetJson() {
             window.haha.callHandler(
-                'giveMeToast'
+                'giveMeJson'
                 , function(ret){
-                        console.log('无参， 有回调。');
-                        alert('无参， 有回调。');
+                        console.log('无参， 有回调。ret is:' , ret.akey, ret.bkey, ret.ckey);
+                        alert('无参， 有回调。返回json');
+                  }
+            );
+        }
+
+        function testRetString() {
+            window.haha.callHandler(
+                'giveMeString'
+                , function(ret){
+                        console.log('无参， 有回调。ret is:' , ret);
+                        alert('无参， 有回调。返回string' + ret);
                   }
             );
         }
@@ -126,7 +141,7 @@
 
             bridge.registerHandler("functionInJs", function(data, responseCallback) {
                 document.getElementById("show").innerHTML = ("data from Java: = " + data);
-                var responseData = "Javascript Says Right back aka!";
+                var responseData = {a:"Javascript Says Right back aka!", b:"b"};
                 responseCallback(responseData);
             });
         })

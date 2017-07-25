@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
+    compile "com.google.code.gson:gson:2.8.1"
 }
 
 def siteUrl = 'https://github.com/daawa/JsBridge'

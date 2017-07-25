@@ -1,5 +1,8 @@
 package com.github.ziv.lib.jsbridge;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +19,8 @@ public class Message {
 
 	private String callbackId; //callbackId
 	private String responseId; //responseId
-	private String responseData; //responseData
-	private String data; //data of message
+	private Object responseData; //responseData
+	private Object data; //data of message
 	private String handlerName; //name of handler
 
     private final static String CALLBACK_ID_STR = "callbackId";
@@ -32,10 +35,10 @@ public class Message {
 	public void setResponseId(String responseId) {
 		this.responseId = responseId;
 	}
-	public String getResponseData() {
+	public Object getResponseData() {
 		return responseData;
 	}
-	public void setResponseData(String responseData) {
+	public void setResponseData(Object responseData) {
 		this.responseData = responseData;
 	}
 	public String getCallbackId() {
@@ -44,10 +47,12 @@ public class Message {
 	public void setCallbackId(String callbackId) {
 		this.callbackId = callbackId;
 	}
-	public String getData() {
+
+	public Object getData() {
 		return data;
 	}
-	public void setData(String data) {
+
+	public void setData(Object data) {
 		this.data = data;
 	}
 	public String getHandlerName() {
@@ -57,16 +62,31 @@ public class Message {
 		this.handlerName = handlerName;
 	}
 	
-	public String toJson() {
-        JSONObject jsonObject= new JSONObject();
+//	public String toJson() {
+//        JSONObject jsonObject= new JSONObject();
+//        try {
+//            jsonObject.put(CALLBACK_ID_STR, getCallbackId());
+//            jsonObject.put(HANDLER_NAME_STR, getHandlerName());
+//            jsonObject.put(RESPONSE_DATA_STR, getResponseData());
+//            jsonObject.put(RESPONSE_ID_STR, getResponseId());
+//
+//            jsonObject.put(DATA_STR, getData());
+//
+//
+//            return jsonObject.toString();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
+    public static String toJson2(Message message) {
         try {
-            jsonObject.put(CALLBACK_ID_STR, getCallbackId());
-            jsonObject.put(DATA_STR, getData());
-            jsonObject.put(HANDLER_NAME_STR, getHandlerName());
-            jsonObject.put(RESPONSE_DATA_STR, getResponseData());
-            jsonObject.put(RESPONSE_ID_STR, getResponseId());
-            return jsonObject.toString();
-        } catch (JSONException e) {
+            Gson gson = new Gson();
+            String element = gson.toJson(message);
+            return element;
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

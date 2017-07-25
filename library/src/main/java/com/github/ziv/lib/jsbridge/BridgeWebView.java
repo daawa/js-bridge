@@ -2,6 +2,7 @@ package com.github.ziv.lib.jsbridge;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ObbInfo;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
@@ -128,18 +130,19 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     }
 
     @Override
-    public void send(String data) {
+    public void send(Object data) {
         send(data, null);
     }
 
+
     @Override
-    public void send(String data, CallBackFunction responseCallback) {
+    public void send(Object data, CallBackFunction responseCallback) {
         doSend(null, data, responseCallback);
     }
 
-    private void doSend(String handlerName, String data, CallBackFunction responseCallback) {
+    private void doSend(String handlerName, Object data, CallBackFunction responseCallback) {
         Message m = new Message();
-        if (!TextUtils.isEmpty(data)) {
+        if (data != null) {
             m.setData(data);
         }
         if (responseCallback != null) {
@@ -162,7 +165,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     }
 
     void dispatchMessage(Message m) {
-        String messageJson = m.toJson();
+        String messageJson = Message.toJson2(m);
         //escape special characters for json string
         messageJson = messageJson.replaceAll("(\\\\)([^utrn])", "\\\\\\\\$1$2");
         messageJson = messageJson.replaceAll("(?<=[^\\\\])(\")", "\\\\\"");
@@ -210,14 +213,18 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         BridgeUtil.getInstance(this.getBridgeName()).webViewLoadLocalJs(this, BridgeWebView.toLoadJs);
     }
 
+    // messages from native to web
     CallBackFunction CONSUME_MESSAGE_HANDLER = new CallBackFunction() {
 
         @Override
-        public void onCallBack(String data) {
+        public void onCallBack(Object data) {
             // deserializeMessage
             List<Message> list = null;
+            if(data == null){
+                data = "" ;
+            }
             try {
-                list = Message.toArrayList(data);
+                list = Message.toArrayList(data.toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 return;
@@ -231,7 +238,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
                 // if message has a responseId, then it is a RESPONSE from javascript to java
                 if (!TextUtils.isEmpty(responseId)) {
                     CallBackFunction function = responseCallbacks.get(responseId);
-                    String responseData = m.getResponseData();
+                    Object responseData = m.getResponseData();
                     function.onCallBack(responseData);
                     responseCallbacks.remove(responseId);
                 } else { // if message has a callbackId, then it is a CALL from javascript to java
@@ -240,7 +247,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
                     if (!TextUtils.isEmpty(callbackId)) {
                         responseFunction = new CallBackFunction() {
                             @Override
-                            public void onCallBack(String data) {
+                            public void onCallBack(Object data) {
                                 Message responseMsg = new Message();
                                 responseMsg.setResponseId(callbackId);
                                 responseMsg.setResponseData(data);
@@ -250,7 +257,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
                     } else {
                         responseFunction = new CallBackFunction() {
                             @Override
-                            public void onCallBack(String data) {
+                            public void onCallBack(Object data) {
                                 // do nothing
                             }
                         };
