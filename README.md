@@ -1,4 +1,7 @@
-#js-bridge
+# js-bridge
+
+
+[![latest release](https://jitpack.io/v/daawa/js-bridge.svg)](https://jitpack.io/#daawa/js-bridge)
 
 It is based on [this](https://github.com/lzyzsd/JsBridge) repository. 
 
