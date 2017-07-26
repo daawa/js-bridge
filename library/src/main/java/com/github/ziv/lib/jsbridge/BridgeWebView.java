@@ -2,9 +2,7 @@ package com.github.ziv.lib.jsbridge;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ObbInfo;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -15,13 +13,10 @@ import android.webkit.WebViewClient;
 
 import com.github.ziv.lib.library.R;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
@@ -29,9 +24,9 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     public static boolean debugMode = false;
     private final String TAG = "BridgeWebView";
     private BridgeWebViewClient client;
-    private String bridgeName = "WebViewJavascriptBridge";
+    private volatile String bridgeName = "WebViewJavascriptBridge";
 
-    public static final String toLoadJs = "WebViewJavascriptBridge.js";
+    public static final String assetJsFile = "WebViewJavascriptBridge.js";
     Map<String, CallBackFunction> responseCallbacks = new HashMap<String, CallBackFunction>();
     Map<String, BridgeHandler> messageHandlers = new HashMap<String, BridgeHandler>();
     BridgeHandler defaultHandler = new DefaultHandler();
@@ -112,6 +107,8 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
             WebView.setWebContentsDebuggingEnabled(true);
         }
         this.setWebViewClient(generateBridgeWebViewClient());
+
+        BridgeUtil.getInstance(bridgeName).preLoadJsString(this, assetJsFile);
     }
 
     protected BridgeWebViewClient generateBridgeWebViewClient() {
@@ -210,7 +207,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     }
 
     public void loadBridgeJs() {
-        BridgeUtil.getInstance(this.getBridgeName()).webViewLoadLocalJs(this, BridgeWebView.toLoadJs);
+        BridgeUtil.getInstance(this.getBridgeName()).webViewLoadLocalJs(this, BridgeWebView.assetJsFile);
     }
 
     // messages from native to web

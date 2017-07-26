@@ -118,6 +118,17 @@ public class MainActivity extends Activity implements OnClickListener {
 
         });
 
+        webView.registerHandler("giveMeBoolean", new BridgeHandler() {
+
+            @Override
+            public void handler(Object data, CallBackFunction function) {
+                Log.i(TAG, "handler = giveMeToast, data from web = " + data);
+                Toast.makeText(MainActivity.this, "handler = giveMeToast, data from web = " + data, Toast.LENGTH_SHORT).show();
+                function.onCallBack(true);
+            }
+
+        });
+
         User user = new User();
         Location location = new Location();
         location.address = "SDU";

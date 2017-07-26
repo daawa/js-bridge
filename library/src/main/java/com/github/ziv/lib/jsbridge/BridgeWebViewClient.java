@@ -7,7 +7,6 @@ import android.webkit.WebViewClient;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -101,8 +100,8 @@ public class BridgeWebViewClient extends WebViewClient {
     }
 
     private void injectLocalJs(){
-        if (BridgeWebView.toLoadJs != null) {
-            BridgeUtil.getInstance(webView.getBridgeName()).webViewLoadLocalJs(webView, BridgeWebView.toLoadJs);
+        if (BridgeWebView.assetJsFile != null) {
+            BridgeUtil.getInstance(webView.getBridgeName()).webViewLoadLocalJs(webView, BridgeWebView.assetJsFile);
         }
     }
 }

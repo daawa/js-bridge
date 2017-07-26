@@ -109,6 +109,16 @@
             );
         }
 
+        function testRetBoolean() {
+            window.haha.callHandler(
+                'giveMeBoolean'
+                , function(ret){
+                        console.log('无参， 有回调。ret is:' , ret);
+                        alert('无参， 有回调。返回bool ' + ret);
+                  }
+            );
+        }
+
         function bridgeLog(logContent) {
             document.getElementById("show").innerHTML = logContent;
         }
