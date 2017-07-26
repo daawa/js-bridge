@@ -3,16 +3,12 @@ package com.github.ziv.lib.jsbridge;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
 import android.webkit.WebView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
-import java.util.concurrent.Executors;
 
 public class BridgeUtil {
     final static String YY_OVERRIDE_SCHEMA = "yy://";
@@ -27,15 +23,17 @@ public class BridgeUtil {
     String JS_FETCH_QUEUE_FROM_JAVA = "javascript:WebViewJavascriptBridge._fetchQueue();";
     public final static String JAVASCRIPT_STR = "javascript:";
 
-    private String bridgeName;
+    private String bridgeName = "WebViewJavascriptBridge";
     private static BridgeUtil one;
     private static volatile String preLoadedJs = null;
 
     public BridgeUtil(String bridgeName) {
-        this.bridgeName = bridgeName;
+        if (!TextUtils.isEmpty(bridgeName)) {
+            this.bridgeName = bridgeName;
+            JS_HANDLE_MESSAGE_FROM_JAVA = "javascript:" + bridgeName + "._handleMessageFromNative('%s');";
+            JS_FETCH_QUEUE_FROM_JAVA = "javascript:" + bridgeName + "._fetchQueue();";
+        }
 
-        JS_HANDLE_MESSAGE_FROM_JAVA = "javascript:" + bridgeName + "._handleMessageFromNative('%s');";
-        JS_FETCH_QUEUE_FROM_JAVA = "javascript:" + bridgeName + "._fetchQueue();";
     }
 
     public static BridgeUtil getInstance(String bridgeName) {
@@ -99,7 +97,7 @@ public class BridgeUtil {
             view.loadUrl("javascript:" + preLoadedJs);
             ZLog.w("JsAssert", "end injecting js..");
         } else {
-            new LoadJsAsyncTask(view, path){
+            new LoadJsAsyncTask(view, path) {
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     ZLog.w("JsAssert", "begin injecting js..");
@@ -110,7 +108,7 @@ public class BridgeUtil {
         }
     }
 
-    public void preLoadJsString( WebView webView, final String path){
+    public void preLoadJsString(WebView webView, final String path) {
         LoadJsAsyncTask task = new LoadJsAsyncTask(webView, path);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -157,7 +155,8 @@ public class BridgeUtil {
         private WebView webView;
         private Context context;
         private String path;
-        LoadJsAsyncTask(WebView view, String path){
+
+        LoadJsAsyncTask(WebView view, String path) {
             this.webView = view;
             this.context = view.getContext();
             this.path = path;

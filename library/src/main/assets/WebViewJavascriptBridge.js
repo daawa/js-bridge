@@ -131,7 +131,7 @@
 
 
     function _handleMessageFromNative(messageJSON) {
-        console.log(messageJSON);
+        console.log("" + bridgeName + " msg:" + messageJSON);
 
         _dispatchMessageFromNative(messageJSON);
 
