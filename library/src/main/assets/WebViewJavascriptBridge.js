@@ -89,7 +89,7 @@
         setTimeout(function() {
             var message = JSON.parse(messageJSON);
             var responseCallback;
-            //java call finished, now need to call js callback function
+            //java call finished, now need to invoke js callback function
             if (message.responseId) {
                 responseCallback = responseCallbacks[message.responseId];
                 if (!responseCallback) {
@@ -98,8 +98,8 @@
                 }
                 responseCallback(message.responseData);
                 delete responseCallbacks[message.responseId];
-            } else {
-                //直接发送
+
+            } else { // it is a message from native WebView.callHandler(...)
                 if (message.callbackId) {
                     var callbackResponseId = message.callbackId;
                     responseCallback = function(responseData) {

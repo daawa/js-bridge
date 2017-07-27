@@ -232,13 +232,13 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
             for (int i = 0; i < list.size(); i++) {
                 Message m = list.get(i);
                 String responseId = m.getResponseId();
-                // if message has a responseId, then it is a RESPONSE from javascript to java
+                // if message has a responseId, then it is a RESPONSE from javascript to java（ we　called js handler by WebView.callHandler(..))
                 if (!TextUtils.isEmpty(responseId)) {
                     CallBackFunction function = responseCallbacks.get(responseId);
                     Object responseData = m.getResponseData();
                     function.onCallBack(responseData);
                     responseCallbacks.remove(responseId);
-                } else { // if message has a callbackId, then it is a CALL from javascript to java
+                } else { // if message has a callbackId, then it is a CALL from javascript to java ( js called XXBridge.callHandler(...) )
                     CallBackFunction responseFunction = null;
                     final String callbackId = m.getCallbackId();
                     if (!TextUtils.isEmpty(callbackId)) {
