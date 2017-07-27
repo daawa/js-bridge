@@ -29,10 +29,12 @@ public class BridgeWebViewClient extends WebViewClient {
             e.printStackTrace();
         }
 
-        if (url.startsWith(BridgeUtil.YY_RETURN_DATA)) { //
+        ZLog.w("WebClient:",url);
+
+        if (url.startsWith(BridgeUtil.getInstance(webView).BRIDGE_RETURN_DATA)) { //
             webView.handlerReturnData(url);
             return true;
-        } else if (url.startsWith(BridgeUtil.YY_OVERRIDE_SCHEMA)) { //
+        } else if (url.startsWith(BridgeUtil.getInstance(webView).BRIDGE_OVERRIDE_SCHEMA)) { //
             webView.flushMessageQueue();
             return true;
         } else {
@@ -101,7 +103,7 @@ public class BridgeWebViewClient extends WebViewClient {
 
     private void injectLocalJs(){
         if (BridgeWebView.assetJsFile != null) {
-            BridgeUtil.getInstance(webView.getBridgeName()).webViewLoadLocalJs(webView, BridgeWebView.assetJsFile);
+            BridgeUtil.getInstance(webView).webViewLoadLocalJs(webView, BridgeWebView.assetJsFile);
         }
     }
 }

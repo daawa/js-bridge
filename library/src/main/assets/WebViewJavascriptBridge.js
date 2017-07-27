@@ -18,7 +18,7 @@
     var responseCallbacks = {};
     var uniqueId = 1;
 
-    var CUSTOM_PROTOCOL_SCHEME = 'yy';
+    var CUSTOM_PROTOCOL_SCHEME = bridge_communicate_scheme;
     var QUEUE_HAS_MESSAGE = '__QUEUE_MESSAGE__/';
 
     function _createQueueReadyIframe(doc) {
@@ -73,7 +73,7 @@
         }
         console.log(message);
         sendMessageQueue.push(message);
-        messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + '://' + QUEUE_HAS_MESSAGE;
+        messagingIframe.src = CUSTOM_PROTOCOL_SCHEME  + QUEUE_HAS_MESSAGE;
     }
 
     // 提供给native调用,该函数作用:获取sendMessageQueue返回给native,由于android不能直接获取返回的内容,所以使用url shouldOverrideUrlLoading 的方式返回内容
@@ -81,7 +81,7 @@
         var messageQueueString = JSON.stringify(sendMessageQueue);
         sendMessageQueue = [];
         //android can't read directly the return data, so we can reload iframe src to communicate with java
-        messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + '://return/_fetchQueue/' + encodeURIComponent(messageQueueString);
+        messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + 'return/_fetchQueue/' + encodeURIComponent(messageQueueString);
     }
 
     //提供给native使用,
@@ -99,7 +99,9 @@
                 responseCallback(message.responseData);
                 delete responseCallbacks[message.responseId];
 
-            } else { // it is a message from native WebView.callHandler(...)
+            } else {
+            // it is a message from native WebView.callHandler(...)
+
                 if (message.callbackId) {
                     var callbackResponseId = message.callbackId;
                     responseCallback = function(responseData) {

@@ -11,36 +11,47 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class BridgeUtil {
-    final static String YY_OVERRIDE_SCHEMA = "yy://";
-    final static String YY_RETURN_DATA = YY_OVERRIDE_SCHEMA + "return/";//format   yy://return/{function}/returncontent
-    final static String YY_FETCH_QUEUE = YY_RETURN_DATA + "_fetchQueue/";
-    final static String EMPTY_STR = "";
-    final static String UNDERLINE_STR = "_";
-    final static String SPLIT_MARK = "/";
+    private String bridgeName = "WebViewJavascriptBridge";
+    static final String EMPTY_STR = "";
+    static final String UNDERLINE_STR = "_";
+    static final String SPLIT_MARK = "/";
+
+    String BRIDGE_OVERRIDE_SCHEMA;
+    String BRIDGE_RETURN_DATA;
+    String BRIDGE_FETCH_QUEUE;
+
+
 
     final static String CALLBACK_ID_FORMAT = "JAVA_CB_%s";
     String JS_HANDLE_MESSAGE_FROM_JAVA = "javascript:WebViewJavascriptBridge._handleMessageFromNative('%s');";
     String JS_FETCH_QUEUE_FROM_JAVA = "javascript:WebViewJavascriptBridge._fetchQueue();";
-    public final static String JAVASCRIPT_STR = "javascript:";
 
-    private String bridgeName = "WebViewJavascriptBridge";
+
     private static BridgeUtil one;
     private static volatile String preLoadedJs = null;
 
-    public BridgeUtil(String bridgeName) {
+    private BridgeUtil(String bridgeName) {
         if (!TextUtils.isEmpty(bridgeName)) {
             this.bridgeName = bridgeName;
-            JS_HANDLE_MESSAGE_FROM_JAVA = "javascript:" + bridgeName + "._handleMessageFromNative('%s');";
-            JS_FETCH_QUEUE_FROM_JAVA = "javascript:" + bridgeName + "._fetchQueue();";
         }
+        init();
 
     }
 
-    public static BridgeUtil getInstance(String bridgeName) {
-        if (one != null && TextUtils.equals(bridgeName, one.bridgeName)) {
+    private void init() {
+        BRIDGE_OVERRIDE_SCHEMA = (bridgeName + "BridgeScheme://").toLowerCase();//scheme is case insensitive
+        BRIDGE_RETURN_DATA = BRIDGE_OVERRIDE_SCHEMA + "return/";//format   hahBridgeScheme://return/{function}/returncontent
+        BRIDGE_FETCH_QUEUE = BRIDGE_RETURN_DATA + "_fetchQueue/";
+
+        JS_HANDLE_MESSAGE_FROM_JAVA = "javascript:" + bridgeName + "._handleMessageFromNative('%s');";
+        JS_FETCH_QUEUE_FROM_JAVA = "javascript:" + bridgeName + "._fetchQueue();";
+    }
+
+    public static BridgeUtil getInstance(BridgeWebView webView) {
+        if (one != null && TextUtils.equals(webView.getBridgeName(), one.bridgeName)) {
             return one;
         } else {
-            one = new BridgeUtil(bridgeName);
+            one = new BridgeUtil(webView.getBridgeName());
             return one;
         }
     }
@@ -50,12 +61,12 @@ public class BridgeUtil {
     }
 
 
-    public static String getDataFromReturnUrl(String url) {
-        if (url.startsWith(YY_FETCH_QUEUE)) {
-            return url.replace(YY_FETCH_QUEUE, EMPTY_STR);
+    public String getDataFromReturnUrl(String url) {
+        if (url.startsWith(BRIDGE_FETCH_QUEUE)) {
+            return url.replace(BRIDGE_FETCH_QUEUE, EMPTY_STR);
         }
 
-        String temp = url.replace(YY_RETURN_DATA, EMPTY_STR);
+        String temp = url.replace(BRIDGE_RETURN_DATA, EMPTY_STR);
         String[] functionAndData = temp.split(SPLIT_MARK);
 
         if (functionAndData.length >= 2) {
@@ -68,8 +79,8 @@ public class BridgeUtil {
         return null;
     }
 
-    public static String getFunctionFromReturnUrl(String url) {
-        String temp = url.replace(YY_RETURN_DATA, EMPTY_STR);
+    public String getFunctionFromReturnUrl(String url) {
+        String temp = url.replace(BRIDGE_RETURN_DATA, EMPTY_STR);
         String[] functionAndData = temp.split(SPLIT_MARK);
         if (functionAndData.length >= 1) {
             return functionAndData[0];
@@ -126,6 +137,7 @@ public class BridgeUtil {
             String line = null;
             StringBuilder sb = new StringBuilder();
             sb.append("var bridgeName = \"").append(bridgeName).append("\";");
+            sb.append("var bridge_communicate_scheme = \"").append(BRIDGE_OVERRIDE_SCHEMA).append("\";");
             do {
                 line = bufferedReader.readLine();
                 if (line != null && !line.matches("^\\s*\\/\\/.*")) {
