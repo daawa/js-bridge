@@ -78,4 +78,11 @@ In your project root build.gradle, add jitpack to your repositories
 
 and in the build.gradle of your app module: 
 
-	compile 'com.github.ziv-zh:js-bridge:0.2.2.1'
+	compile 'com.github.ziv-zh:js-bridge:0.4.0'
+	
+	
+### proguard
+
+```
+-keep class com.github.ziv.lib.jsbridge.Message{*;}
+```
