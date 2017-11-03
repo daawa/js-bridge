@@ -58,31 +58,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         webView.setDefaultHandler(new DefaultHandler());
 
-//        webView.setWebChromeClient(new WebChromeClient() {
-//
-//            @SuppressWarnings("unused")
-//            public void openFileChooser(ValueCallback<Uri> uploadMsg, String AcceptType, String capture) {
-//                this.openFileChooser(uploadMsg);
-//            }
-//
-//            @SuppressWarnings("unused")
-//            public void openFileChooser(ValueCallback<Uri> uploadMsg, String AcceptType) {
-//                this.openFileChooser(uploadMsg);
-//            }
-//
-//            public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-//                mUploadMessage = uploadMsg;
-//                pickFile();
-//            }
-//
-//            @Override
-//            public void onProgressChanged(WebView view, int newProgress) {
-//                super.onProgressChanged(view, newProgress);
-//                ZLog.w(TAG, "onProgressChanged: " + newProgress);
-//            }
-//        });
-
-        webView.loadUrl("file:///android_asset/demo.html");
+        webView.loadUrl("file:///android_asset/shared_web_worker/index.html");
 
         webView.registerHandler("submitFromWeb", new BridgeHandler() {
 
@@ -134,25 +110,25 @@ public class MainActivity extends Activity implements OnClickListener {
         location.address = "SDU";
         user.location = location;
         user.name = "大头鬼";
+//
+//        webView.callHandler("functionInJs", new Gson().toJson(user), new CallBackFunction() {
+//            @Override
+//            public void onCallBack(Object data) {
+//
+//                Toast.makeText(MainActivity.this,
+//                        "functionInJs returned:" + data,
+//                        Toast.LENGTH_LONG)
+//                        .show();
+//
+//            }
+//        });
 
-        webView.callHandler("functionInJs", new Gson().toJson(user), new CallBackFunction() {
-            @Override
-            public void onCallBack(Object data) {
-
-                Toast.makeText(MainActivity.this,
-                        "functionInJs returned:" + data,
-                        Toast.LENGTH_LONG)
-                        .show();
-
-            }
-        });
-
-        webView.send("hello", new CallBackFunction() {
-            @Override
-            public void onCallBack(Object data) {
-
-            }
-        });
+//        webView.send("hello", new CallBackFunction() {
+//            @Override
+//            public void onCallBack(Object data) {
+//
+//            }
+//        });
 
     }
 

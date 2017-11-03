@@ -1,6 +1,16 @@
 package com.github.ziv.lib.jsbridge;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.net.http.SslError;
+import android.view.InputEvent;
+import android.view.KeyEvent;
+import android.webkit.ClientCertRequest;
+import android.webkit.HttpAuthHandler;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -94,6 +104,172 @@ public class BridgeWebViewClient extends WebViewClient {
             extra.onReceivedError(view, errorCode, description, failingUrl);
         } else {
             super.onReceivedError(view, errorCode, description, failingUrl);
+        }
+    }
+
+    @Override
+    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+        if (extra != null) {
+            return extra.shouldInterceptRequest(view, url);
+        }
+        return super.shouldInterceptRequest(view, url);
+
+    }
+
+    @TargetApi(21)
+    @Override
+    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+        String url = request.getUrl().toString();
+        if (extra != null) {
+            return extra.shouldInterceptRequest(view, request);
+        }
+        return super.shouldInterceptRequest(view, request);
+    }
+
+    @Override
+    public void onLoadResource(WebView view, String url) {
+        if (extra != null) {
+            extra.onLoadResource(view, url);
+        } else {
+            super.onLoadResource(view, url);
+        }
+
+    }
+
+    @TargetApi(23)
+    @Override
+    public void onPageCommitVisible(WebView view, String url) {
+        if(extra != null){
+            extra.onPageCommitVisible(view, url);
+        } else {
+            super.onPageCommitVisible(view, url);
+        }
+
+    }
+
+    @Override
+    public void onTooManyRedirects(WebView view, android.os.Message cancelMsg, android.os.Message continueMsg) {
+        if(extra != null){
+            extra.onTooManyRedirects(view, cancelMsg, continueMsg);
+        } else {
+            super.onTooManyRedirects(view, cancelMsg, continueMsg);
+        }
+
+    }
+
+    @TargetApi(23)
+    @Override
+    public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+        if(extra != null){
+            extra.onReceivedError(view, request, error);
+        } else {
+            super.onReceivedError(view, request, error);
+        }
+
+    }
+
+    @TargetApi(23)
+    @Override
+    public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+        if(extra != null){
+            extra.onReceivedHttpError(view, request, errorResponse);
+        } else {
+            super.onReceivedHttpError(view, request, errorResponse);
+        }
+
+    }
+
+    @Override
+    public void onFormResubmission(WebView view, android.os.Message dontResend, android.os.Message resend) {
+        if(extra != null){
+            extra.onFormResubmission(view, dontResend, resend);
+        } else {
+            super.onFormResubmission(view, dontResend, resend);
+        }
+
+    }
+
+    @Override
+    public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+        if(extra != null ){
+            extra.doUpdateVisitedHistory(view, url, isReload);
+        } else {
+            super.doUpdateVisitedHistory(view, url, isReload);
+        }
+
+    }
+
+    @Override
+    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+        if(extra != null) {
+            extra.onReceivedSslError(view, handler, error);
+        } else {
+            super.onReceivedSslError(view, handler, error);
+        }
+    }
+
+    @TargetApi(21)
+    @Override
+    public void onReceivedClientCertRequest(WebView view, ClientCertRequest request) {
+        if(extra != null ){
+            extra.onReceivedClientCertRequest(view, request);
+        } else {
+            super.onReceivedClientCertRequest(view, request);
+        }
+    }
+
+    @Override
+    public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
+        if(extra == null){
+            super.onReceivedHttpAuthRequest(view, handler, host, realm);
+        } else {
+            extra.onReceivedHttpAuthRequest(view,handler,host,realm);
+        }
+    }
+
+    @Override
+    public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
+        if(extra == null){
+            return super.shouldOverrideKeyEvent(view, event);
+        } else {
+            return extra.shouldOverrideKeyEvent(view, event);
+        }
+    }
+
+    @Override
+    public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
+        if(extra == null){
+            super.onUnhandledKeyEvent(view, event);
+        } else {
+            extra.onUnhandledKeyEvent(view, event);
+        }
+    }
+
+    @TargetApi(21)
+    @Override
+    public void onUnhandledInputEvent(WebView view, InputEvent event) {
+        if(extra == null){
+            super.onUnhandledInputEvent(view, event);
+        } else {
+            extra.onUnhandledInputEvent(view, event);
+        }
+    }
+
+    @Override
+    public void onScaleChanged(WebView view, float oldScale, float newScale) {
+        if(extra==null){
+            super.onScaleChanged(view, oldScale, newScale);
+        } else {
+            extra.onScaleChanged(view, oldScale, newScale);
+        }
+    }
+
+    @Override
+    public void onReceivedLoginRequest(WebView view, String realm, String account, String args) {
+        if(extra == null){
+            super.onReceivedLoginRequest(view, realm, account, args);
+        } else {
+            extra.onReceivedLoginRequest(view, realm, account, args);
         }
     }
 
