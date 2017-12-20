@@ -245,15 +245,15 @@ public class BridgeWebViewClient extends WebViewClient {
         }
     }
 
-    @TargetApi(21)
-    @Override
-    public void onUnhandledInputEvent(WebView view, InputEvent event) {
-        if(extra == null){
-            super.onUnhandledInputEvent(view, event);
-        } else {
-            extra.onUnhandledInputEvent(view, event);
-        }
-    }
+//    @Override
+//    @TargetApi(21)
+//    public void onUnhandledInputEvent(WebView view, InputEvent event) {
+//        if(extra == null){
+//            super.onUnhandledInputEvent(view, event);
+//        } else {
+//            extra.onUnhandledInputEvent(view, event);
+//        }
+//    }
 
     @Override
     public void onScaleChanged(WebView view, float oldScale, float newScale) {

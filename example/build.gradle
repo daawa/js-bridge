@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
 
     defaultConfig {
         applicationId "com.github.ziv.lib.jsbridge.example"
         minSdkVersion 21
-        targetSdkVersion 23
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -20,8 +19,23 @@ android {
 }
 
 dependencies {
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+
+    testImplementation "android.arch.core:core-testing:1.0.0"
+    testImplementation "android.arch.persistence.room:testing:1.0.0"
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':library')
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.google.code.gson:gson:2.7'
+    implementation project(':library')
+    implementation 'com.android.support:appcompat-v7:26+'
+    implementation 'com.google.code.gson:gson:2.7'
+
+    implementation "android.arch.lifecycle:common-java8:1.0.0"
+    implementation "android.arch.lifecycle:runtime:1.0.3"
+    implementation "android.arch.lifecycle:extensions:1.0.0"
+    implementation "android.arch.lifecycle:reactivestreams:1.0.0"
+
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    implementation "android.arch.persistence.room:rxjava2:1.0.0"
+    implementation "android.arch.paging:runtime:1.0.0-alpha4-1"
 }

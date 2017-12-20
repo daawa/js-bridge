@@ -6,11 +6,10 @@ group='com.github.daawa'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.0'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 26
         versionCode 1
         versionName version
     }
